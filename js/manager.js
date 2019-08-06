@@ -42,7 +42,9 @@ module.exports = function (oAppData) {
 										if (bChangePassword)
 										{
 											App.setAuthToken(oResponse.Result.AuthToken);
-											Popups.showPopup(ChangePasswordPopup);
+											Popups.showPopup(ChangePasswordPopup, [TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_CHANGE'), function () {
+												$.removeCookie('AuthToken');
+											}]);
 										}
 										else
 										{
@@ -53,10 +55,15 @@ module.exports = function (oAppData) {
 								else
 								{
 									App.setAuthToken(oResponse.Result.AuthToken);
-									Popups.showPopup(ChangePasswordPopup);
+									Popups.showPopup(ChangePasswordPopup, [TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_EXPIRED_NEED_CHANGING'), function () {
+										$.removeCookie('AuthToken');
+									}]);
 								}
 							}
-							
+							else
+							{
+								this.onSystemLoginResponseBase(oResponse, oRequest);
+							}
 						}
 						else
 						{

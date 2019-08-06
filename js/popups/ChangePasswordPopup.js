@@ -6,16 +6,11 @@ var
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
 	ValidationUtils = require('%PathToCoreWebclientModule%/js/utils/Validation.js'),
 	
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	Api = require('%PathToCoreWebclientModule%/js/Api.js'),
-	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	
-	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
-	AlertPopup = require('%PathToCoreWebclientModule%/js/popups/AlertPopup.js'),
 	
 	CAbstractPopup = require('%PathToCoreWebclientModule%/js/popups/CAbstractPopup.js')
 ;
@@ -31,7 +26,8 @@ function CChangePasswordPopup()
 	this.newPassword = ko.observable('');
 	this.confirmPassword = ko.observable('');
 	
-	this.fAfterPasswordChanged = null;
+	this.heading = ko.observable('');
+	this.fOnPopupClose = null;
 }
 
 _.extendOwn(CChangePasswordPopup.prototype, CAbstractPopup.prototype);
@@ -39,15 +35,25 @@ _.extendOwn(CChangePasswordPopup.prototype, CAbstractPopup.prototype);
 CChangePasswordPopup.prototype.PopupTemplate = '%ModuleName%_ChangePasswordPopup';
 
 /**
- * @param {Function} fAfterPasswordChanged
+ * @param {string} sHeading
+ * @param {Function} fOnPopupClose
  */
-CChangePasswordPopup.prototype.onOpen = function (fAfterPasswordChanged)
+CChangePasswordPopup.prototype.onOpen = function (sHeading, fOnPopupClose)
 {
 	this.currentPassword('');
 	this.newPassword('');
 	this.confirmPassword('');
 	
-	this.fAfterPasswordChanged = fAfterPasswordChanged;
+	this.heading(sHeading);
+	this.fOnPopupClose = fOnPopupClose;
+};
+
+CChangePasswordPopup.prototype.onClose = function ()
+{
+	if (_.isFunction(this.fOnPopupClose))
+	{
+		this.fOnPopupClose();
+	}
 };
 
 CChangePasswordPopup.prototype.change = function ()
@@ -84,29 +90,11 @@ CChangePasswordPopup.prototype.onUpdatePasswordResponse = function (oResponse, o
 	if (oResponse.Result === false)
 	{
 		Api.showErrorByCode(oResponse, TextUtils.i18n('%MODULENAME%/ERROR_PASSWORD_NOT_SAVED'));
-		Ajax.startSendRequests();
 	}
 	else
 	{
-		if (oResponse.Result && oResponse.Result.RefreshToken)
-		{
-			App.setAuthToken(oResponse.Result.RefreshToken);
-			
-			Popups.showPopup(AlertPopup, [TextUtils.i18n('%MODULENAME%/REPORT_PASSWORD_CHANGED') + ' ' + TextUtils.i18n('%MODULENAME%/REPORT_REDIRECT_TO_LOGIN'), function () {
-				UrlUtils.clearAndReloadLocation(true, false);
-			}]);
-		}
-		else
-		{
-			Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_PASSWORD_CHANGED'));
-
-			this.closePopup();
-
-			if (_.isFunction(this.fAfterPasswordChanged))
-			{
-				this.fAfterPasswordChanged();
-			}
-		}
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_PASSWORD_CHANGED'));
+		this.closePopup();
 	}
 };
 
