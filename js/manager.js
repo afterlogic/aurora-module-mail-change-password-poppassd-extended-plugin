@@ -2,10 +2,13 @@
 
 module.exports = function (oAppData) {
 	var
+		_ = require('underscore'),
+		
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 		
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+		
 		AlertPopup = require('%PathToCoreWebclientModule%/js/popups/AlertPopup.js'),
 		ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 		ChangePasswordPopup = require('modules/%ModuleName%/js/popups/ChangePasswordPopup.js')
@@ -19,6 +22,16 @@ module.exports = function (oAppData) {
 				;
 				if (oLoginScreenView)
 				{
+					// Do not completely replace previous onSystemLoginResponse, because it might be already changed by another plugin
+					var fOldOnSystemLoginResponse = oLoginScreenView.onSystemLoginResponse.bind(oLoginScreenView);
+					if (!_.isFunction(fOldOnSystemLoginResponse))
+					{
+						fOldOnSystemLoginResponse = oLoginScreenView.onSystemLoginResponseBase.bind(oLoginScreenView);
+					}
+					if (!_.isFunction(fOldOnSystemLoginResponse))
+					{
+						fOldOnSystemLoginResponse = function () {};
+					}
 					oLoginScreenView.onSystemLoginResponse = function (oResponse, oRequest) {
 						if (oResponse && oResponse.Result && oResponse.Result.AuthToken && oResponse.SubscriptionsResult && oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'])
 						{
@@ -48,7 +61,7 @@ module.exports = function (oAppData) {
 										}
 										else
 										{
-											this.onSystemLoginResponseBase(oResponse, oRequest);
+											fOldOnSystemLoginResponse(oResponse, oRequest);
 										}
 									}.bind(this), TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_ABOUT_EXPIRE'), TextUtils.i18n('%MODULENAME%/ACTION_CHANGE'), TextUtils.i18n('%MODULENAME%/ACTION_LATER')]);
 								}
@@ -62,12 +75,12 @@ module.exports = function (oAppData) {
 							}
 							else
 							{
-								this.onSystemLoginResponseBase(oResponse, oRequest);
+								fOldOnSystemLoginResponse(oResponse, oRequest);
 							}
 						}
 						else
 						{
-							this.onSystemLoginResponseBase(oResponse, oRequest);
+							fOldOnSystemLoginResponse(oResponse, oRequest);
 						}
 					};
 				}
