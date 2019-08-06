@@ -23,8 +23,25 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 	public function init() 
 	{
 		parent::init();
+		$this->subscribeEvent('Mail::ChangePassword::before', array($this, 'onBeforeChangePassword'));
 		$this->subscribeEvent('Core::Login::before', array($this, 'onBeforeLogin'));
 	}
+
+	public function onBeforeChangePassword(&$aArgs, &$mResult)
+	{
+		if (!isset($aArgs['AccountId']))
+		{
+			$aUserInfo = \Aurora\System\Api::getAuthenticatedUserInfo(
+				\Aurora\System\Api::getAuthenticatedUserAuthToken()
+			);
+
+			if (isset($aUserInfo['account']))
+			{
+				$aArgs['AccountId'] = (int) $aUserInfo['account'];
+			}
+		}
+	}
+
 	
 	public function onBeforeLogin($aArgs, &$mResult, &$mSubResult)
 	{
@@ -64,7 +81,7 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 							}
 						}
 						
-						$iExpire = isset($aResult['EXPIRE']) ? (int) $aResult['EXPIRE'] : 0;
+						$iExpire = -4; //isset($aResult['EXPIRE']) ? (int) $aResult['EXPIRE'] : 0;
 						$iCfgGrace = isset($aResult['CFGGRACE']) ? (int) $aResult['CFGGRACE'] : 0;
 						$iCfgWarn = isset($aResult['CFGWARN']) ? (int) $aResult['CFGWARN'] : 0;
 
