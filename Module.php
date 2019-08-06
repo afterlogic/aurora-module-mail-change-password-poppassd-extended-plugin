@@ -22,6 +22,7 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 {
 	public function init() 
 	{
+		parent::init();
 		$this->subscribeEvent('Core::Login::before', array($this, 'onBeforeLogin'));
 	}
 	
@@ -62,13 +63,16 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 								}
 							}
 						}
-//						$mSubResult = $aResult;
+						
+						$iExpire = isset($aResult['EXPIRE']) ? (int) $aResult['EXPIRE'] : 0;
+						$iCfgGrace = isset($aResult['CFGGRACE']) ? (int) $aResult['CFGGRACE'] : 0;
+						$iCfgWarn = isset($aResult['CFGWARN']) ? (int) $aResult['CFGWARN'] : 0;
+
 						$mSubResult = [
-							'CallHelpdesk' => true,
-							'ChangePassword' => true,
-							'DaysBeforeExpire' => -1,
+							'CallHelpdesk' => ($iExpire < 0 && abs($iExpire) > $iCfgGrace) ? true : false,
+							'ChangePassword' => ($iExpire <= $iCfgWarn) ? true : false,
+							'DaysBeforeExpire' => $iExpire,
 						];
-//						var_dump($aResult); exit;
 					}
 				}
 			}
