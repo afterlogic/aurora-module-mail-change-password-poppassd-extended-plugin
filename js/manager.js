@@ -22,18 +22,23 @@ module.exports = function (oAppData) {
 					oLoginScreenView.onSystemLoginResponse = function (oResponse, oRequest) {
 						if (oResponse && oResponse.Result && oResponse.Result.AuthToken && oResponse.SubscriptionsResult && oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'])
 						{
+							this.loading(false);
 							var oResult = oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'];
-							if (oResult.InformPasswordExpired)
+							if (oResult.CallHelpdesk)
 							{
-								Popups.showPopup(AlertPopup, [TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_EXPIRED'), function () {
-										console.log('do nothing');
-								}, TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_EXPIRED')]);
+								Popups.showPopup(AlertPopup, [TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_EXPIRED'), function () {}, TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_EXPIRED')]);
 							}
-							else if (oResult.AskChangePassword)
+							else if (oResult.ChangePassword)
 							{
 								if (oResult.DaysBeforeExpire >= 0)
 								{
-									Popups.showPopup(ConfirmPopup, [TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_ABOUT_EXPIRE', {'COUNT': oResult.DaysBeforeExpire}), function (bChangePassword) {
+									var sConfirm = TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_ABOUT_EXPIRE_PLURAL', {'COUNT': oResult.DaysBeforeExpire}, null, oResult.DaysBeforeExpire);
+									if (oResult.DaysBeforeExpire === 0)
+									{
+										sConfirm = TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_EXPIRES_TODAY');
+									}
+									sConfirm += ' ' + TextUtils.i18n('%MODULENAME%/INFO_CHANGE_PASSWOD_BEFORE_EXPIRING');
+									Popups.showPopup(ConfirmPopup, [sConfirm, function (bChangePassword) {
 										if (bChangePassword)
 										{
 											App.setAuthToken(oResponse.Result.AuthToken);
@@ -47,9 +52,8 @@ module.exports = function (oAppData) {
 								}
 								else
 								{
-									Popups.showPopup(AlertPopup, [TextUtils.i18n('%MODULENAME%/INFO_PASSWORD_ABOUT_EXPIRE'), function () {
-										console.log(arguments);
-									}, TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_ABOUT_EXPIRE')]);
+									App.setAuthToken(oResponse.Result.AuthToken);
+									Popups.showPopup(ChangePasswordPopup);
 								}
 							}
 							

@@ -64,9 +64,9 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 						}
 //						$mSubResult = $aResult;
 						$mSubResult = [
-							'InformPasswordExpired' => false,
-							'AskChangePassword' => true,
-							'DaysBeforeExpire' => 3,
+							'CallHelpdesk' => true,
+							'ChangePassword' => true,
+							'DaysBeforeExpire' => -1,
 						];
 //						var_dump($aResult); exit;
 					}
