@@ -78,7 +78,7 @@ CChangePasswordPopup.prototype.sendChangeRequest = function ()
 		}
 	;
 	
-	Ajax.send('Mail', 'ChangeAccountPassword', oParameters, this.onUpdatePasswordResponse, this);
+	Ajax.send('Mail', 'ChangePassword', oParameters, this.onUpdatePasswordResponse, this);
 };
 
 /**
