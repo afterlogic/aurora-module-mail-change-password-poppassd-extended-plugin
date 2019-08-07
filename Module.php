@@ -81,7 +81,7 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 							}
 						}
 						
-						$iExpire = -4; //isset($aResult['EXPIRE']) ? (int) $aResult['EXPIRE'] : 0;
+						$iExpire = isset($aResult['EXPIRE']) ? (int) $aResult['EXPIRE'] : 0;
 						$iCfgGrace = isset($aResult['CFGGRACE']) ? (int) $aResult['CFGGRACE'] : 0;
 						$iCfgWarn = isset($aResult['CFGWARN']) ? (int) $aResult['CFGWARN'] : 0;
 
