@@ -33,7 +33,7 @@ module.exports = function (oAppData) {
 						fOldOnSystemLoginResponse = function () {};
 					}
 					oLoginScreenView.onSystemLoginResponse = function (oResponse, oRequest) {
-						if (oResponse && oResponse.Result && oResponse.Result.AuthToken && oResponse.SubscriptionsResult && oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'])
+						if (oResponse && oResponse.SubscriptionsResult && oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'])
 						{
 							this.loading(false);
 							var oResult = oResponse.SubscriptionsResult['%ModuleName%::onBeforeLogin'];
