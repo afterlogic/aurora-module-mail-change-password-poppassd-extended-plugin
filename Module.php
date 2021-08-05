@@ -93,7 +93,7 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
 					}
 				}
 			}
-			catch (Exception $oException)
+			catch (\Exception $oException)
 			{
 				$this->oPopPassD->Disconnect();
 				throw $oException;
