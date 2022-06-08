@@ -1,36 +1,36 @@
 {
-  "Disabled": [
-    false,
-    "bool"
-  ],
-  "Disabled_Description": [
-    "",
-    "string"
-  ],
-  "SupportedServers": [
-    [
-      "*"
-    ],
-    "array"
-  ],
-  "SupportedServers_Description": [
-    "",
-    "string"
-  ],
-  "Host": [
-    "127.0.0.1",
-    "string"
-  ],
-  "Host_Description": [
-    "",
-    "string"
-  ],
-  "Port": [
-    106,
-    "int"
-  ],
-  "Port_Description": [
-    "",
-    "string"
-  ]
+	"Disabled": [
+		false,
+		"bool"
+	],
+	"Disabled_Description": [
+		"",
+		"string"
+	],
+	"SupportedServers": [
+		[
+			"*"
+		],
+		"array"
+	],
+	"SupportedServers_Description": [
+		"",
+		"string"
+	],
+	"Host": [
+		"127.0.0.1",
+		"string"
+	],
+	"Host_Description": [
+		"",
+		"string"
+	],
+	"Port": [
+		106,
+		"int"
+	],
+	"Port_Description": [
+		"",
+		"string"
+	]
 }
