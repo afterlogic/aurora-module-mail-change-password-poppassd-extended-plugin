@@ -8,5 +8,10 @@ In admin interface, under "Poppassd" tab, you need to supply list of mailserver 
 
 On the same tab, you need to provide hostname/IP and port number for connecting to POPPASSD service.
 
+# Development
+This repository has a pre-commit hook. To make it work you need to configure git to use the particular hooks folder.
+
+`git config --local core.hooksPath .githooks/`
+
 # License
 This module is licensed under AGPLv3 license if free version of the product is used or Afterlogic Software License if commercial version of the product was purchased.
