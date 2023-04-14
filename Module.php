@@ -27,6 +27,15 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
         $this->subscribeEvent('Core::Login::before', array($this, 'onBeforeLogin'));
     }
 
+    /**
+     *
+     * @return Module
+     */
+    public static function Decorator()
+    {
+        return parent::Decorator();
+    }
+
     public function onBeforeChangePassword(&$aArgs, &$mResult)
     {
         if (!isset($aArgs['AccountId'])) {
