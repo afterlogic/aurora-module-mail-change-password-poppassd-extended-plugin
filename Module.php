@@ -36,6 +36,15 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
         return parent::Decorator();
     }
 
+    /**
+     *
+     * @return Settings
+     */
+    protected function GetModuleSettings()
+    {
+        return $this->oModuleSettings;
+    }
+
     public function onBeforeChangePassword(&$aArgs, &$mResult)
     {
         if (!isset($aArgs['AccountId'])) {
