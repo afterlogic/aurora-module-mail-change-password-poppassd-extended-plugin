@@ -16,6 +16,8 @@ use function Sabre\Uri\split;
  * @license https://afterlogic.com/products/common-licensing Afterlogic Software License
  * @copyright Copyright (c) 2023, Afterlogic Corp.
  *
+ * @property Settings $oModuleSettings
+ *
  * @package Modules
  */
 class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
@@ -63,8 +65,8 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
     {
         if (null === $this->oPopPassD) {
             $this->oPopPassD = new \Aurora\Modules\MailChangePasswordPoppassdPlugin\Poppassd(
-                $this->getConfig('Host', '127.0.0.1'),
-                $this->getConfig('Port', 106)
+                $this->oModuleSettings->Host,
+                $this->oModuleSettings->Port
             );
         }
 
