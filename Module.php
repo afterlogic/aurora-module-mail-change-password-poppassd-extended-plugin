@@ -80,10 +80,10 @@ class Module extends \Aurora\Modules\MailChangePasswordPoppassdPlugin\Module
             $sLogin = $aArgs['Login'];
             $sPassword = $aArgs['Password'];
             try {
-                $this->oPopPassD->SendLine('getuser '.$sLogin);
+                $this->oPopPassD->SendLine('getuser ' . $sLogin);
 
                 if ($this->oPopPassD->CheckResponse($this->oPopPassD->ReadLine())) {
-                    if ($this->oPopPassD->SendLine('pass '.$sPassword) && $this->oPopPassD->CheckResponse($this->oPopPassD->ReadLine())) {
+                    if ($this->oPopPassD->SendLine('pass ' . $sPassword) && $this->oPopPassD->CheckResponse($this->oPopPassD->ReadLine())) {
                         while ($sLine =  $this->oPopPassD->ReadLine()) {
                             $aLine = \explode(' ', $sLine);
                             if ($aLine[0] == 200) {
