@@ -54,7 +54,6 @@ module.exports = function (oAppData) {
 									Popups.showPopup(ConfirmPopup, [sConfirm, function (bChangePassword) {
 										if (bChangePassword)
 										{
-											App.setAuthToken(oResponse.Result.AuthToken);
 											Popups.showPopup(ChangePasswordPopup, [TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_CHANGE'), function () {
 												$.removeCookie('AuthToken');
 											}]);
@@ -67,7 +66,6 @@ module.exports = function (oAppData) {
 								}
 								else
 								{
-									App.setAuthToken(oResponse.Result.AuthToken);
 									Popups.showPopup(ChangePasswordPopup, [TextUtils.i18n('%MODULENAME%/HEADING_PASSWORD_EXPIRED_NEED_CHANGING'), function () {
 										$.removeCookie('AuthToken');
 									}]);
